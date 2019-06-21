@@ -1,31 +1,36 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { CardService } from './services/card.service';
+import { of } from 'rxjs';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+    let fixture: ComponentFixture<AppComponent>;
+    let component: AppComponent;
+    const mockCardService = jasmine.createSpyObj('cardService', ['getCard']);
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                AppComponent
+            ],
+            providers: [{provide: CardService, useValue: mockCardService}]
+        }).compileComponents();
+    }));
 
-  it(`should have as title 'zingo'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('zingo');
-  });
+    beforeEach(() => {
+        mockCardService.getCard.calls.reset();
+        mockCardService.getCard.and.returnValue(of({}));
+        fixture = TestBed.createComponent(AppComponent);
+        component = fixture.debugElement.componentInstance;
+    });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to zingo!');
-  });
+    it(`should have as title 'zingo'`, () => {
+        expect(component.title).toEqual('Zingo');
+    });
+
+    it('should render title in a h1 tag', () => {
+        fixture.detectChanges();
+        const compiled = fixture.debugElement.nativeElement;
+        expect(compiled.querySelector('h1').textContent).toContain('Welcome to Zingo!');
+    });
 });
