@@ -1,8 +1,11 @@
+import { Tile } from './tile';
+
 export class ZingoCard {
-    cardNumber: number;
+    id: number;
+    title: string;
     spaces: [ // 3 x 3 layout of spaces on card
-        string, string, string,
-        string, string, string,
-        string, string, string
+        Tile, Tile, Tile,
+        Tile, Tile, Tile,
+        Tile, Tile, Tile
     ];
 }

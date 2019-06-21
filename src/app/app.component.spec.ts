@@ -1,7 +1,8 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 import { CardService } from './services/card.service';
-import { of } from 'rxjs';
 
 describe('AppComponent', () => {
     let fixture: ComponentFixture<AppComponent>;
@@ -13,7 +14,8 @@ describe('AppComponent', () => {
             declarations: [
                 AppComponent
             ],
-            providers: [{provide: CardService, useValue: mockCardService}]
+            providers: [{provide: CardService, useValue: mockCardService}],
+            schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
     }));
 

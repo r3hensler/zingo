@@ -17,6 +17,6 @@ export class AppComponent implements OnInit {
         this.cardService.getCard().subscribe(
             result => this.card = result,
             err => console.warn(err)
-        )
+        );
     }
 }
