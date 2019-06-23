@@ -8,8 +8,9 @@ import { ZingoCard } from './models/zingo-card';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    public title = 'Zingo';
     public card: ZingoCard;
+    public confirmed = false;
+    public title = 'Zingo';
     private cardCount: number;
     private cardNumber: number;
 
@@ -26,6 +27,10 @@ export class AppComponent implements OnInit {
             result => this.card = result,
             err => console.warn(err)
         );
+    }
+
+    public confirmCard(confirmed: boolean) {
+        this.confirmed = !!confirmed;
     }
 
     public changeCard(increment: number) {

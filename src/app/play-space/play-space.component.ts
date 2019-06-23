@@ -9,7 +9,9 @@ import { ZingoCard } from '../models/zingo-card';
 })
 export class PlaySpaceComponent implements OnInit, OnChanges {
     @Input() card: ZingoCard;
+    @Input() confirmed: boolean;
     @Output() changeCard = new EventEmitter<number>();
+    @Output() confirmCard = new EventEmitter<boolean>();
     public zingoForm: FormGroup;
 
     constructor(private fb: FormBuilder) {
@@ -22,6 +24,20 @@ export class PlaySpaceComponent implements OnInit, OnChanges {
         if (changeObj.card && changeObj.card.currentValue) {
             this.populateCard(changeObj.card.currentValue);
         }
+    }
+
+    public incrementCard(value: number) {
+        this.changeCard.emit(value);
+    }
+
+    public confirm() {
+        this.confirmCard.emit(true);
+    }
+
+    private populateCard(newCard: ZingoCard): void {
+        this.zingoForm.get('cardName').setValue(newCard.title);
+        const zingoGrid = this.zingoForm.get('cardGrid');
+        newCard.spaces.forEach((space, index) => zingoGrid.get(`${index + 1}`).setValue(space.value));
     }
 
     private setupForm() {
@@ -40,15 +56,5 @@ export class PlaySpaceComponent implements OnInit, OnChanges {
                 9: ['']
             })
         });
-    }
-
-    public incrementCard(value: number) {
-        this.changeCard.emit(value);
-    }
-
-    private populateCard(newCard: ZingoCard): void {
-        this.zingoForm.get('cardName').setValue(newCard.title);
-        const zingoGrid = this.zingoForm.get('cardGrid');
-        newCard.spaces.forEach((space, index) => zingoGrid.get(`${index + 1}`).setValue(space.value));
     }
 }

@@ -7,5 +7,7 @@
 <app-play-space
     *ngIf="card"
     [card]="card"
-    (changeCard)="changeCard($event)">
+    [confirmed]="confirmed"
+    (changeCard)="changeCard($event)"
+    (confirmCard)="confirmCard($event)">
 </app-play-space>
