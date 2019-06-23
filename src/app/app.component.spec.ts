@@ -7,7 +7,7 @@ import { CardService } from './services/card.service';
 describe('AppComponent', () => {
     let fixture: ComponentFixture<AppComponent>;
     let component: AppComponent;
-    const mockCardService = jasmine.createSpyObj('cardService', ['getCard']);
+    const mockCardService = jasmine.createSpyObj('cardService', ['getCard', 'cardCount']);
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -22,6 +22,8 @@ describe('AppComponent', () => {
     beforeEach(() => {
         mockCardService.getCard.calls.reset();
         mockCardService.getCard.and.returnValue(of({}));
+        mockCardService.cardCount.calls.reset();
+        mockCardService.cardCount.and.returnValue(of(2));
         fixture = TestBed.createComponent(AppComponent);
         component = fixture.debugElement.componentInstance;
     });

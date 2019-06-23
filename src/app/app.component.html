@@ -4,4 +4,8 @@
         Welcome to {{ title }}!
     </h1>
 </div>
-<app-play-space [card]="card" *ngIf="card"></app-play-space>
+<app-play-space
+    *ngIf="card"
+    [card]="card"
+    (changeCard)="changeCard($event)">
+</app-play-space>

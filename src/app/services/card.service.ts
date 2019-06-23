@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ZingoCard } from '../models/zingo-card';
-import { Observable, of } from 'rxjs';
 
 const urlRoot = 'http://localhost:3000';
 
@@ -12,7 +13,15 @@ export class CardService {
 
     constructor(private httpService: HttpClient) { }
 
-    public getCard(): Observable<ZingoCard> {
-        return this.httpService.get(`${urlRoot}/cards/1`) as Observable<ZingoCard>;
+    public cardCount() {
+        return this.getCards().pipe(map((cards: ZingoCard[]) => cards.length));
+    }
+
+    public getCard(cardNumber: number = 1): Observable<ZingoCard> {
+        return this.httpService.get(`${urlRoot}/cards/${cardNumber}`) as Observable<ZingoCard>;
+    }
+
+    public getCards(): Observable<ZingoCard[]> {
+        return this.httpService.get(`${urlRoot}/cards`) as Observable<ZingoCard[]>;
     }
 }

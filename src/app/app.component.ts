@@ -10,13 +10,28 @@ import { ZingoCard } from './models/zingo-card';
 export class AppComponent implements OnInit {
     public title = 'Zingo';
     public card: ZingoCard;
+    private cardCount: number;
+    private cardNumber: number;
 
     constructor(private cardService: CardService) {}
 
     ngOnInit() {
-        this.cardService.getCard().subscribe(
+        this.cardService.cardCount().subscribe(count => this.cardCount = count);
+        this.cardNumber = 1;
+        this.getCard(this.cardNumber);
+    }
+
+    public getCard(newCardNumber: number) {
+        this.cardService.getCard(newCardNumber).subscribe(
             result => this.card = result,
             err => console.warn(err)
         );
+    }
+
+    public changeCard(increment: number) {
+        // only get available cardNumbers (1 to number of cards)
+        const tempCardNumber = this.cardNumber + increment;
+        this.cardNumber = tempCardNumber > 0 && tempCardNumber <= this.cardCount ? tempCardNumber : tempCardNumber % this.cardCount;
+        this.getCard(this.cardNumber);
     }
 }

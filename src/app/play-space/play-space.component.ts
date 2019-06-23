@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ZingoCard } from '../models/zingo-card';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ZingoCard } from '../models/zingo-card';
 
 @Component({
     selector: 'app-play-space',
@@ -9,9 +9,22 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class PlaySpaceComponent implements OnInit, OnChanges {
     @Input() card: ZingoCard;
+    @Output() changeCard = new EventEmitter<number>();
     public zingoForm: FormGroup;
 
     constructor(private fb: FormBuilder) {
+        this.setupForm();
+    }
+
+    ngOnInit() {}
+
+    ngOnChanges(changeObj: SimpleChanges) {
+        if (changeObj.card && changeObj.card.currentValue) {
+            this.populateCard(changeObj.card.currentValue);
+        }
+    }
+
+    private setupForm() {
         this.zingoForm = this.fb.group({
             name: [''],
             cardName: [''],
@@ -29,19 +42,13 @@ export class PlaySpaceComponent implements OnInit, OnChanges {
         });
     }
 
-    ngOnInit() {}
-
-    ngOnChanges(changeObj: SimpleChanges) {
-        if (changeObj.card && changeObj.card.currentValue) {
-            const newCard: ZingoCard = changeObj.card.currentValue;
-            this.zingoForm.get('cardName').setValue(newCard.title);
-            const newCardSpaces = newCard.spaces;
-            const zingoGrid = this.zingoForm.get('cardGrid');
-
-            for (let i = 1; i < 10; i++) {
-                zingoGrid.get(`${i}`).setValue(newCardSpaces[i - 1].value);
-            }
-        }
+    public incrementCard(value: number) {
+        this.changeCard.emit(value);
     }
 
+    private populateCard(newCard: ZingoCard): void {
+        this.zingoForm.get('cardName').setValue(newCard.title);
+        const zingoGrid = this.zingoForm.get('cardGrid');
+        newCard.spaces.forEach((space, index) => zingoGrid.get(`${index + 1}`).setValue(space.value));
+    }
 }
