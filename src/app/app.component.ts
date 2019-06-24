@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
+import { combineLatest, Observable, Subject, Subscription, merge } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { ZingoCard } from './models/zingo-card';
 import { CardService } from './services/card.service';
+import { TileService } from './services/tile.service';
 
 @Component({
     selector: 'app-root',
@@ -19,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private confirm$: Subject<boolean>;
     private getResult: Subscription;
 
-    constructor(private cardService: CardService) {}
+    constructor(private cardService: CardService, private tileService: TileService) {}
 
     ngOnInit() {
         this.setupStreams();
@@ -43,6 +44,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.card$.next(this.cardNumber);
     }
 
+    private closeListeners() {
+        this.card$.complete();
+        this.confirm$.complete();
+    }
+
     private getCard(subj: Subject<number>): Observable<ZingoCard> {
         return subj.pipe(
             mergeMap(cardNo => this.cardService.getCard(cardNo)),
@@ -62,8 +68,12 @@ export class AppComponent implements OnInit, OnDestroy {
         const cardSelect$ = this.getCard(this.card$);
         combineLatest(cardSelect$, this.confirm$)
             .pipe(
-                tap(() => console.log('received and clicked'))
+                mergeMap(() => this.tileService.getTiles()),
+                tap(() => this.closeListeners())
             )
-            .subscribe(() => {}, err => console.warn(err));
+            .subscribe(
+                result => console.log('tiles', result),
+                err => console.warn(err)
+            );
     }
 }
