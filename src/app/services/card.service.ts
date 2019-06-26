@@ -14,7 +14,7 @@ export class CardService {
     constructor(private httpService: HttpClient) { }
 
     public cardCount() {
-        return this.getCards().pipe(map((cards: ZingoCard[]) => cards.length));
+        return this.httpService.get(`${urlRoot}/cards/count`) as Observable<number>;
     }
 
     public getCard(cardNumber: number = 1): Observable<ZingoCard> {

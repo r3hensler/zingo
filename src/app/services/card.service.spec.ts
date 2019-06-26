@@ -17,6 +17,8 @@ describe('CardService', () => {
                 return of(expectedCardGet);
             } else if (url === `${urlRoot}/cards`) {
                 return of([expectedCardGet, expectedCardGet]);
+            } else if (url === `${urlRoot}/cards/count`) {
+                return of(2);
             } else {
                 return of(null);
             }
