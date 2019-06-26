@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-First, make sure you have already downloaded and setup the mock JSON server, [Zingo-Server](https://github.com/r3hensler/zingo-server). Start the Zingo-Server by running `npm start`, under the Zingo-Server project root. The Zingo-Server will listen on port 3000.
+First, make sure you have already downloaded and setup the [Zingo-Server](https://github.com/r3hensler/zingo-server). Start the Zingo-Server by running `npm start`, under the Zingo-Server project root. The Zingo-Server will listen on port 3000.
 
 Next, run `npm start` under the Zingo project for a dev server. A browser window should open to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
